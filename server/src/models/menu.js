@@ -1,4 +1,4 @@
-import mongoose, { SchemaTypes } from "mongoose";
+const {Schema, default: mongoose} = require('mongoose');
 const menuSchema = new mongoose.Schema({
     name: String,
     type: {
@@ -9,11 +9,11 @@ const menuSchema = new mongoose.Schema({
     price: Number,
     unit: String,
     restaurantId: {
-        type: SchemaTypes.ObjectId,
+        type: [mongoose.Schema.Types.ObjectId],
         ref: "restaurants",
         require: true,
     },
     discount: Number
 })
 const menuModel = mongoose.model("menu", menuSchema)
-export default menuModel
+module.exports = {menuModel};

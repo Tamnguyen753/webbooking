@@ -47,7 +47,7 @@ const UpdateRestaurant = async (req, res) => {
             describe,
             image
         }
-        const RestaurantUpdateCondition = {_id: req.params.id, type: 'manager'};
+        const RestaurantUpdateCondition = {_id: req.params.id};
 
         if(!RestaurantUpdateCondition){
             return res.status(401).json({success: false, message: "update failed!"});
@@ -61,7 +61,7 @@ const UpdateRestaurant = async (req, res) => {
 
 const DeleteRestaurant = async(req, res) => {
     try{
-        const RestaurantDeleteCondition = {_id: req.params.id, type: 'manager'};
+        const RestaurantDeleteCondition = {_id: req.params.id};
 
         const deleteRestaurant = await restaurantModel.findOneAndDelete(RestaurantDeleteCondition);
 

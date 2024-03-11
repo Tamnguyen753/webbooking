@@ -1,11 +1,11 @@
-import mongoose, { SchemaTypes } from "mongoose";
+const {Schema, default: mongoose} = require('mongoose');
 const staffSchema = new mongoose.Schema({
     name: String,
     address: String,
     dateOfBirth: Date,
     staffCode: String,
     restaurantId: {
-        type: SchemaTypes.ObjectId,
+        type: [mongoose.Schema.Types.ObjectId],
         ref: "restaurants",
         require: true
     },
@@ -18,4 +18,4 @@ const staffSchema = new mongoose.Schema({
     },
 })
 const staffModel = mongoose.model("staff", staffSchema)
-export default staffModel
+module.exports = {staffModel};

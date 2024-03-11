@@ -1,4 +1,4 @@
-import mongoose, { SchemaTypes } from "mongoose";
+const {Schema, default: mongoose} = require('mongoose');
 const reservationSchema = new mongoose.Schema({
     name: String,
     phone: Number,
@@ -15,21 +15,21 @@ const reservationSchema = new mongoose.Schema({
     checkOutDate: Date,
     tables: [
         {
-            type: SchemaTypes.ObjectId,
+            type: [mongoose.Schema.Types.ObjectId],
             ref: "tables",
         },
     ],
     restaurantId: {
-        type: SchemaTypes.ObjectId,
+        type: [mongoose.Schema.Types.ObjectId],
         ref: "restaurants",
         require: true,
     },
     menu: [
         {
-            type: SchemaTypes.ObjectId,
+            type: [mongoose.Schema.Types.ObjectId],
             ref: "menu",
         },
     ],
 });
 const reservationModel = mongoose.model("reservations", reservationSchema);
-export default reservationModel;
+module.exports = {reservationModel};

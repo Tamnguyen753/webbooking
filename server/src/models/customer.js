@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const {Schema, default: mongoose} = require('mongoose');
 const customerSchema = new mongoose.Schema({
     username: String,
     password: String,
@@ -7,4 +7,4 @@ const customerSchema = new mongoose.Schema({
     avatar: String
 })
 const customerModel = mongoose.model('customers', customerSchema)
-export default customerModel
+module.exports = {customerModel};

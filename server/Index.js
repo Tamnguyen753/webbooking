@@ -1,6 +1,6 @@
-import express from 'express'
-import { StaffRoute } from './src/routes/staff'
-import { RestaurantRoute } from './src/routes/Restaurant';
+const express = require('express');
+const {StaffRoute} = require('./src/routes/staff');
+const {RestaurantRoute} = require('./src/routes/Restaurant');
 const app = express()
 app.use(express.json())
 
