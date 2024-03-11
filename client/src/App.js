@@ -11,6 +11,7 @@ import Checkout from "./pages/Staffs/Checkout/Checkout";
 import StaffLogin from "./pages/Staffs/Login/StaffLogin";
 import ManagerLogin from "./pages/Manager/Login/ManagerLogin";
 import ManagerHome from "./pages/Manager/ManagerHome/ManagerHome";
+import StaffRegister from "./pages/Staffs/Login/StaffRegister";
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/checkin" element={<Checkin />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/stafflogin" element={<StaffLogin />} />
+        <Route path="/staffRegister" element={<StaffRegister/>}/>
         <Route path="/managerlogin" element={<ManagerLogin />} />
         <Route path="/managerhome" element={<ManagerHome />} />
       </Routes>
