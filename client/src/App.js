@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import "./App.css";
-import React from "react";
+import React, { createContext } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/public/Home/Home";
 import RestaurantDetail from "./pages/public/RestaurantDetail/RestaurantDetail";
@@ -12,7 +13,11 @@ import StaffLogin from "./pages/Staffs/Login/StaffLogin";
 import ManagerLogin from "./pages/Manager/Login/ManagerLogin";
 import ManagerHome from "./pages/Manager/ManagerHome/ManagerHome";
 import StaffRegister from "./pages/Staffs/Login/StaffRegister";
+import RegisterRestaurant from "./pages/Restaurant/Login/RegisterRestaurant";
+import LoginRestaurant from "./pages/Restaurant/Login/LoginRestaurant";
 
+
+export const AppContext = createContext();
 
 const App = () => {
   return (
@@ -20,6 +25,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/restaurantdetail" element={<RestaurantDetail />} />
+        <Route path="/restaurantRegister" element={<RegisterRestaurant/>} />
+        <Route path="/restaurantLogin" element={<LoginRestaurant/>} />
         <Route path="/userlogin" element={<Login />} />
         <Route path="/userregister" element={<Register />} />
         <Route path="/bookinginfo" element={<BookingInfo />} />

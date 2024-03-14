@@ -1,16 +1,15 @@
 const bcrypt = require('bcrypt');
 const staffModel = require("../models/staff");
 const jwt = require('jsonwebtoken');
-const json = require('express');
 
 const Register = async (req, res) => {
+    const {name, address, dateOfBirth, staffCode, username, password, type} = req.body;
+    
+    if(!name || !address || !dateOfBirth || !staffCode || !username || !password){
+        return res.status(400).json({success: false, message: "information is required!"});
+    }
+    
     try{
-        const {name, address, dateOfBirth, staffCode, username, password, type} = req.body;
-        if(!name || !address || !dateOfBirth || !staffCode || !username || !password){
-            return res.status(400).json({success: false, message: "information is required!"});
-        }
-
-       
         const staff = await staffModel.findOne({username});
 
         if(staff){
@@ -18,10 +17,10 @@ const Register = async (req, res) => {
         }
 
         const hashedPassword = bcrypt.hashSync(password, 10);
-        const newStaff = new UserActivation({name, address, dateOfBirth, staffCode, username, password: hashedPassword, type});
+        const newStaff = new staffModel({name, address, dateOfBirth, staffCode, username, password: hashedPassword, type});
         await newStaff.save();
 
-        const ACCESS_TOKEN_SECRET = akjfksbmdvskmfbkswuigsc;
+        const ACCESS_TOKEN_SECRET = "akjfksbmdvskmfbkswuigsc";
         const accessToken = jwt.sign({staffId: newStaff._id, type: newStaff.type}, ACCESS_TOKEN_SECRET);
 
         res.json({success: true, message: "staff created successfully!", accessToken});
@@ -50,7 +49,7 @@ const Login = async (req, res) => {
             return res.status(400).json({success: false, message: "incorrect username or password!"});
         }
 
-        const ACCESS_TOKEN_SECRET = akjfksbmdvskmfbkswuigsc;
+        const ACCESS_TOKEN_SECRET = "akjfksbmdvskmfbkswuigsc";
         const accessToken = jwt.sign({staffId: staff._id, type: staff.type}, ACCESS_TOKEN_SECRET);
 
         res.json({success: true, message: "staff login is successfully!", accessToken});
