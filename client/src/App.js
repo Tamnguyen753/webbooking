@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import "./App.css";
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/public/Home/Home";
 import RestaurantDetail from "./pages/public/RestaurantDetail/RestaurantDetail";
@@ -16,11 +16,17 @@ import StaffRegister from "./pages/Staffs/Login/StaffRegister";
 import RegisterRestaurant from "./pages/Restaurant/Login/RegisterRestaurant";
 import LoginRestaurant from "./pages/Restaurant/Login/LoginRestaurant";
 
+import { QueryClient, QueryClientProvider} from "react-query";
 
-export const AppContext = createContext();
+const queryClient = new QueryClient();
+export  const AppContext = createContext();
 
 const App = () => {
+  const [user, setUser] = useState(null);
   return (
+    <QueryClientProvider client={queryClient}>
+    <AppContext.Provider value={{user, setUser,}}>
+    
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -38,6 +44,9 @@ const App = () => {
         <Route path="/managerhome" element={<ManagerHome />} />
       </Routes>
     </BrowserRouter>
+    
+    </AppContext.Provider>
+    </QueryClientProvider>
   );
 };
 
