@@ -11,7 +11,7 @@ const verifyToken = (req, res, next) => {
     const ACCESS_TOKEN_SECRET = akjfksbmdvskmfbkswuigsc; //nen cho vao env
     try {
         const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
-        req.userId = decoded.userId;
+        req.staffId = decoded.staffId;
         next();
     } catch (error) {
         console.log(error);

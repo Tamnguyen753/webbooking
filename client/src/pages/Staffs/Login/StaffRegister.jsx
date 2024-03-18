@@ -1,13 +1,29 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import AlertMessage from '../../../utils/AlertMessage';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style2.css';
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup"
+import useStaff from '../../../hooks/useStaff';
+import { toast } from 'react-toastify';
+import { extractMessageFormErr } from '../../../utils/error';
+import ErrorMessages from '../../../utils/ErrorMessages';
 
+const schema = yup.object().shape({
+    name: yup.string().required("Name is required"),
+    address: yup.string().required("Address is required"),
+    dateOfBirth: yup.date().required("Date of Birth is required"),
+    staffCode: yup.string().required("Staff Code is required"),
+    username: yup.string().required("username is required"),
+    password: yup.string().required("password is required"),
+    confirmPassword: yup.string().required("Confirm password is required").oneOf([yup.ref('password'), null], 'password must match'),
+    type: yup.string().required("type is required"),
+})
 const StaffRegister = () => {
     const [registerForm, setRegisterForm] = useState({
         name: '',
@@ -20,63 +36,74 @@ const StaffRegister = () => {
         type: "staff",
     });
 
-    
-    const [alert, setAlert] = useState(null);
-
-    const {name, address, dateOfBirth, staffCode, username, password, confirmPassword,type} = registerForm;
-    // const {name, address, staffCode, username, password, confirmPassword,type} = registerForm;
-
-    const onChangeRegisterForm = event => setRegisterForm({
-        ...registerForm,
-        [event.target.name]: event.target.valule
+    const navigate = useNavigate();
+    const {
+        register,
+        handleSubmit, formState: {errors},
+    } = useForm({
+        resolver: yupResolver(schema),
     });
+    
+    const {register: registerStaff} = useStaff();
 
-    const register = async event => {
-        
+    const onSubmit = async (data) => {
+        try {
+            await registerStaff(data);
+            toast.success("registed successfully!");
+            navigate("/stafflogin");
+        } catch (err) {
+            toast.error(extractMessageFormErr(err));
+        }
     };
 
   return (
     <>
     <div className='form2'>
-        <p className='td-form2'><b>REGISTER</b></p>
-        <Form className='rg' onSubmit={register}>
-            <AlertMessage info={alert}/>
+        <p className='td-form2'><b>REGISTER STAFF</b></p>
+        <Form className='rg' onSubmit={handleSubmit(onSubmit)}>
+            {/* <AlertMessage info={alert}/> */}
             <Form.Group>
-                <Form.Control type='text' placeholder='Your Fullname' name='name' required value={name} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register('name')} type='text' placeholder='Your Fullname'  required />
+                {errors.name && <ErrorMessages message={errors.name}/>}
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control type='text' placeholder='Your Address' name='address' required value={address} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register('address')} type='text' placeholder='Your Address'  required />
+                {errors.address && <ErrorMessages message={errors.address}/>}
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control type='date'  name='dateOfBirth' required value={registerForm.dateOfBirth} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register("dateOfBirth")} type='date' required ></Form.Control>
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control type='text' placeholder='Your StaffCode' name='staffCode' required value={staffCode} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register('staffCode')} type='text' placeholder='Your StaffCode'  required />
+                {errors.staffCode && <ErrorMessages message={errors.staffCode}/>}
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control type='text' placeholder='username' name='username' required value={username} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register('username')} type='text' placeholder='username'  required />
+                {errors.username && <ErrorMessages message={errors.username}/>}
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control type='password' placeholder='password' name='password' required value={password} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register('password')} type='password' placeholder='password'  required />
+                {errors.password && <ErrorMessages message={errors.password}/>}
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control type='confirmPassword' placeholder='confirmPassword' name='confirmPassword' required value={confirmPassword} onChange={onChangeRegisterForm}></Form.Control>
+                <Form.Control {...register('confirmPassword')} type='password' placeholder='confirmPassword'  required />
+                {errors.confirmPassword && <ErrorMessages message={errors.confirmPassword}/>}
             </Form.Group>
             <br/>
             <Form.Group>
-                <Form.Control as="select"  onChange={onChangeRegisterForm}>
+                <Form.Control {...register("type")} as="select" >
                     <option name='staff' value='staff'>Staff</option>
                     <option name='manager' value='manager'>Manager</option>
                 </Form.Control>
             </Form.Group>
             <br/>
-            <Button variant='success' type='submit'>Register</Button>
+            <Button variant='success' type='submit'  >Register</Button>
             <br/>
         </Form>
         <p> Already have an account?
@@ -87,6 +114,8 @@ const StaffRegister = () => {
     </div>
     </>
   )
+
+
 }
 
 export default StaffRegister
